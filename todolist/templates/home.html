@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+    <title>Todo App</title>
+</head>
+
+<body>
+    <div class = "center">
+        <div class="fle">
+            <h1 >To Do App</h1>
+        <form class="search" action="/search" method="post">
+
+            <input type="text" placeholder="search" name="a" value="{{ab}}">
+            <button id="search" type="submit">Search</button>
+        </form>
+        </div>
+
+        <div class="row">
+        <h3>Create a Task</h3>
+        <form class="qaaa" action="/add" method="post">
+                <input type="text" class="taskin" name="title" placeholder="Enter Todo...">
+                <input type="date" name="date">
+                <button id="addtask" type="submit">Add</button>
+
+            <br><br>
+        </form>
+            <br>
+            <form class="sort" action="/sort" method="post">
+                <button id="sorttask" type="submit">Sort By Date</button>
+            </form>
+            <form action="/deleteall">
+                <button id="delall" type="submit">Delete All</button>
+            </form>
+
+            <br>
+            <form action="/display" method="post">
+                <button id="taskon" type="submit">Tasks on {{ date }}</button>
+                <input class="day" type="date" name="date">
+
+            </form>
+            <br>
+        </div>
+
+
+        <br>
+
+        <h3>Tasks</h3>
+        <br>
+
+        {% if todo_list %}
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Due Date</th>
+                <th>Days Left/Overdue</th>
+                <th>Actions</th>
+            </tr>
+            {% for todo in todo_list %}
+                <tr>
+                    <td>{{ todo.title }}</td>
+                    <td>{{ todo.date }}</td>
+                    <td>{{ todo.days }}</td>
+                    <td>
+                        <a href="{{ url_for('update', todo_id=todo.id) }}">Edit</a>
+                        {% if todo.complete == False %}
+                        <a href="/complete/{{ todo.id }}">Not Completed</a>
+                        {% else %}
+                        <a href="/complete/{{ todo.id }}">Completed</a>
+                        {% endif %}
+                        <a href="{{ url_for('delete', todo_id=todo.id) }}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No tasks yet. Add one above.</p>
+    {% endif %}
+    </div>
+
+</body>
+
+</html>
